@@ -1,0 +1,25 @@
+##create input directory and put the input file
+hdfs dfs -mkdir /input 
+hdfs dfs -put <input file> /input
+
+##cross check if the input file is copied over to hdfs
+hdfs dfs -ls /input
+hdfs dfs -cat /input/<input file> 
+
+
+#compile and create jar files
+
+javac PokerMissingCards.java -cp $(hadoop classpath)  
+jar cvf PokerMissingCards.class ./*.class
+
+hadoop jar PokerMissingCards.jar PokerMissingCards /input/<input file> /output
+
+##To check the output folder:
+
+hdfs dfs -ls /output
+
+##The execution was successful if /output contains a file called /output/_SUCCESS
+
+##To see the output:
+
+hdfs dfs -cat /output/part-r-00000
